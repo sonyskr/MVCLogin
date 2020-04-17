@@ -35,6 +35,12 @@ namespace MVCLogin.Controllers
             }
         }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+
         public ActionResult Logout()
         {
             int userId = (int) Session["userId"];
