@@ -40,6 +40,35 @@ namespace MVCLogin.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult NewEntry(MVCLogin.Models.User userModel)
+        {
+
+            using (LoginDataBaseEntities db = new LoginDataBaseEntities())
+            {
+
+                var userDetails = db.Users.Where(x => x.UserName == userModel.UserName).FirstOrDefault();
+                if(userDetails != null)
+                {
+                    userModel.LoginErrorMessage = "Username Already Taken!";
+                    return View("Create", userModel);
+                }
+                else
+                {
+                    User user = new User();
+                    user.UserName = userModel.UserName;
+                    user.Password = userModel.Password;
+
+                    db.Users.Add(user);
+                    db.SaveChanges();
+
+                    int latestId = user.UserID;
+                    return RedirectToAction("Index");
+                }
+
+            }
+        }
+
 
         public ActionResult Logout()
         {
